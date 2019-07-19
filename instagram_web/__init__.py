@@ -14,7 +14,12 @@ app.register_blueprint(sessions_blueprint, url_prefix="/sessions")
 
 @app.errorhandler(500)
 def internal_server_error(e):
-    return render_template('500.html'), 500
+    return render_template('error.html', error_code=500, message="Internal Server Error"), 500
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error.html')
 
 
 @app.route("/")
