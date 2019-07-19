@@ -2,6 +2,12 @@ import os
 import config
 from flask import Flask
 from models.base_model import db
+from flask_wtf.csrf import CSRFProtect
+
+app = Flask(__name__)
+
+app.secret_key = os.getenv("SECRET_KEY")
+csrf = CSRFProtect(app)
 
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'instagram_web')
