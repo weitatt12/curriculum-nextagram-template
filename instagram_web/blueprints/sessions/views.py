@@ -30,9 +30,9 @@ def create():
     # Log in the user
     login_user(user)
     # flash a welcome message
-    flash('Login successfuly')
+    flash(f'Hi {current_user.name},Login successfuly')
     # redirect them to a page
-    return redirect(url_for('home'))
+    return redirect(url_for('users.edit', id=user.id))
 
 
 @sessions_blueprint.route('/logout')

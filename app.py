@@ -41,9 +41,3 @@ def _db_close(exc):
 def load_user(user_id):
     from models.user import User
     return User.get_by_id(user_id)
-
-
-def create_app(config_filename):
-    app = Flask(__name__)
-    app.register_error_handler(404, page_not_found)
-    return app

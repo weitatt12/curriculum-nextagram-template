@@ -19,8 +19,10 @@
   <title>{% block title %}{% endblock %}NEXTAGRAM</title>
 </head>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="{{ url_for('home') }}">Nextagram</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <a class="navbar-brand" href="{{ url_for('home') }}"><img
+      src="https://is1-ssl.mzstatic.com/image/thumb/Purple127/v4/c5/25/8c/c5258ce9-90dc-b62a-c9af-9d6fd5f9b59d/source/512x512bb.jpg"
+      width="30px" height="30px" alt="next logo" />Nextagram</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -35,7 +37,7 @@
         <a class="nav-link" href=" {{ url_for('users.new') }} ">Sign Up</a>
       </li>
       <li class="nav-item active">
-        <a class="nav-link" href=" {{ url_for('sessions.logout') }}">Log Out</a>
+        <a class="nav-link" href="#">Coding (DND)</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -46,16 +48,17 @@
           <a class="dropdown-item" href="#">Action</a>
           <a class="dropdown-item" href="#">Another action</a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
+          <a class="dropdown-item" href="{{ url_for('sessions.logout') }}">Log Out</a>
         </div>
       </li>
       <li class="nav-item">
         <a class="nav-link disabled" href="#">Disabled</a>
       </li>
     </ul>
+
     <form class="form-inline my-2 my-lg-0">
       <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
 </nav>
