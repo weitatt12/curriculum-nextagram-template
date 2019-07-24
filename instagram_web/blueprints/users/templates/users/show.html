@@ -19,14 +19,17 @@
     <h3>Images</h3>
 
     {% for image in user.images %}
-    <img src="{{image.image_path_url}}" class="w-25">
+    <div class="card w-25 mx-auto d-block">
+        <img src="{{image.image_path_url}}" class="card-img-top">
+        <div class="card-body">
+            <a href="{{url_for('donations.new', image_id=image.id)}}" class="btn btn-primary mx-auto d-block">Donate
+                Now</a>
+        </div>
+
+    </div>
     {% endfor %}
 
 
 </div>
 
 {% endblock %}
-
-if current_user != user and user.private==True
-then "this profile is private"
-else: {% for image in user.image %}

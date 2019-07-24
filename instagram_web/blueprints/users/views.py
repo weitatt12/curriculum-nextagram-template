@@ -37,9 +37,9 @@ def show(username):
         render_template('home.html')
     else:
         if current_user != user:
-            flash(f"You are allowed to see {user.name}'s profile.")
-            return redirect(url_for('users.show'))
-        return render_template('users/show.html', user=user,)
+            flash(f"You are NOT allowed to see {user.name}'s profile.")
+            return redirect(url_for('users.index'))
+        return render_template('users/show.html', user=user)
 
 
 @users_blueprint.route('/', methods=["GET"])
