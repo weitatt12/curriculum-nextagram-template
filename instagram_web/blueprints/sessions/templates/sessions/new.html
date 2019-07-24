@@ -4,6 +4,7 @@
 <div class="container">
     <h1>Login</h1>
 
+    <a href="google.com" class="btn btn-secondary">Login with Google</a>
     <form action="{{ url_for('sessions.create') }}" , method="POST">
         <input type="hidden" name="csrf_token" value="{{csrf_token()}}" />
         <div class=" form-group">

@@ -1,0 +1,32 @@
+{% extends "_layout.html" %}
+{% block content %}
+
+<div class="container">
+    <h1>{{user.name}} Profile Page</h1>
+
+    <img src={{user.profile_image_url}} />
+    <form action="{{ url_for('users.pro_picture') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <label for="image">Upload Your Profile Page</label>
+        <br></br>
+        <input type="file" name="profile_image">
+        <br></br>
+        <button type="submit">Upload</button>
+
+    </form>
+
+
+    <h3>Images</h3>
+
+    {% for image in user.images %}
+    <img src="{{image.image_path_url}}" class="w-25">
+    {% endfor %}
+
+
+</div>
+
+{% endblock %}
+
+if current_user != user and user.private==True
+then "this profile is private"
+else: {% for image in user.image %}

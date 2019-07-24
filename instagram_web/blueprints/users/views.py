@@ -2,6 +2,8 @@ from flask import Blueprint, render_template, url_for, redirect, request, flash
 from werkzeug.security import generate_password_hash
 from models.user import User
 from flask_login import current_user
+from instagram_web.util.helpers import upload_file_to_s3
+import os
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -28,14 +30,22 @@ def create():
         return render_template('users/new.html', name=request.form['name'], errors=u.errors)
 
 
-@users_blueprint.route('/<id>', methods=["GET"])
-def show(id):
-    return redirect(url_for('users.new'))
+@users_blueprint.route('/<username>', methods=["GET"])
+def show(username):
+    user = User.get_or_none(User.username == username)
+    if not user:
+        render_template('home.html')
+    else:
+        if current_user != user:
+            flash(f"You are allowed to see {user.name}'s profile.")
+            return redirect(url_for('users.show'))
+        return render_template('users/show.html', user=user,)
 
 
-# @users_blueprint.route('/', methods=["GET"])
-# def index():
-#     return "USERS"
+@users_blueprint.route('/', methods=["GET"])
+def index():
+    user = User.select()
+    return render_template("home.html")
 
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
@@ -53,13 +63,13 @@ def edit(id):
 @users_blueprint.route('/<id>', methods=['POST'])
 def update(id):
     name_edit = request.form.get('name_edit')
-    password_edit = request.form.get('password_edit')
     email_edit = request.form.get('email_edit')
+    # password_edit = request.form.get('password_edit')
 
     user = User.get_by_id(id)
     user.name = name_edit
-    user.password = password_edit
     user.email = email_edit
+    # user.password = password_edit
 
     if user.save():
         flash('Update Successful')
@@ -69,11 +79,25 @@ def update(id):
         return render_template('home.html')
 
 
-# @users_blueprint.route('/<id>/edit', methods=['GET'])
-# def edit(id):
-#     pass
+@users_blueprint.route('/upload', methods=['GET'])
+def pic():
+    return render_template('users/new.html')
 
 
-# @users_blueprint.route('/<id>', methods=['POST'])
-# def update(id):
-#     pass
+@users_blueprint.route('/upload_pp', methods=['POST'])
+def pro_picture():
+    file = request.files["profile_image"]
+
+    user = User.get_or_none(User.id == current_user.id)
+
+    if file.filename == "":
+        return "Please select a file"
+
+    if user:
+        output = upload_file_to_s3(file, os.environ.get("S3_BUCKET"))
+        # user.profile_image = file.filename
+        User.update(profile_image=output).where(
+            User.id == current_user.id).execute()
+        flash('Upload Successful')
+        return redirect(url_for('users.show', username=user.username))
+    return redirect(url_for('user.new'))

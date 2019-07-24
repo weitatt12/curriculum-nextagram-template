@@ -32,7 +32,7 @@ def create():
     # flash a welcome message
     flash(f'Hi {current_user.name},Login successfuly')
     # redirect them to a page
-    return redirect(url_for('users.edit', id=user.id))
+    return redirect(url_for('home'))
 
 
 @sessions_blueprint.route('/logout')
