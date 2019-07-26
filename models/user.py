@@ -12,6 +12,7 @@ class User(BaseModel):
     username = pw.CharField(unique=True)
     password = pw.CharField(null=False)
     profile_image = pw.CharField(null=True)
+    private = pw.BooleanField(default=False)
 
     def is_authenticated(self):
         return True

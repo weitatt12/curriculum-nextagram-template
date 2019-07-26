@@ -1,5 +1,6 @@
 from flask import Flask, Blueprint, render_template, request, flash, redirect, url_for
 from instagram_web.util.braintree_helper import gateway
+from instagram_web.util.helpers import send_email
 from models.image import Image
 from models.donation import Donation
 from flask_login import current_user

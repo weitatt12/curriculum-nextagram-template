@@ -22,6 +22,15 @@
             <input type="text" name="email_edit" placeholder="Update email" class="form-control" value={{user.email}} />
         </div>
 
+        <div class="form-check">
+            {% if user.private == True %}
+            <input type="checkbox" class="form-check-input" name="private" checked/>
+            {% else %}
+            <input type="checkbox" class="form-check-input" name="private" />
+            {% endif %}
+            <label for="check" class="form-check-label">Private</label>
+        </div>
+
         <button type="submit" class="btn btn-primary">Update</button>
     </form>
 </div>

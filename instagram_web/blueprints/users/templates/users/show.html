@@ -5,18 +5,29 @@
     <h1>{{user.name}} Profile Page</h1>
 
     <img src={{user.profile_image_url}} />
+
     <form action="{{ url_for('users.pro_picture') }}" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+        <br />
+        <br />
         <label for="image">Upload Your Profile Page</label>
         <br></br>
         <input type="file" name="profile_image">
         <br></br>
         <button type="submit">Upload</button>
-
     </form>
+    
+        <form action="{{ url_for('fans_idols.create', idol_id=user.id )}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="submit" class="btn btn-primary" value="follow" />
+        </form>
 
+        <form action="{{ url_for('fans_idols.unfollow', idol_id=user.id)}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="submit" class="btn btn-primary" value="unfollow" />
+        </form>
 
-    <h3>Images</h3>
+    <h2 class="text-center">Images</h2>
 
     {% for image in user.images %}
     <div class="card w-25 mx-auto d-block">
@@ -25,7 +36,6 @@
             <a href="{{url_for('donations.new', image_id=image.id)}}" class="btn btn-primary mx-auto d-block">Donate
                 Now</a>
         </div>
-
     </div>
     {% endfor %}
 

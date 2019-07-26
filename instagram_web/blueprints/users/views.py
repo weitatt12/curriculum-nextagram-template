@@ -36,9 +36,7 @@ def show(username):
     if not user:
         render_template('home.html')
     else:
-        if current_user != user:
-            flash(f"You are NOT allowed to see {user.name}'s profile.")
-            return redirect(url_for('users.index'))
+
         return render_template('users/show.html', user=user)
 
 
@@ -64,6 +62,7 @@ def edit(id):
 def update(id):
     name_edit = request.form.get('name_edit')
     email_edit = request.form.get('email_edit')
+    private_edit = request.form.get('private_edit')
     # password_edit = request.form.get('password_edit')
 
     user = User.get_by_id(id)
@@ -71,12 +70,20 @@ def update(id):
     user.email = email_edit
     # user.password = password_edit
 
-    if user.save():
-        flash('Update Successful')
-        return redirect(url_for('users.edit', id=user.id))
+    if request.form.get('private'):
+        user.private = True
+        if user.save():
+            flash('Update Successful')
+            return redirect(url_for('users.edit', id=user.id))
+        else:
+            return redirect(url_for('users.edit', id=user.id))
     else:
-        flash('Update Fail')
-        return render_template('home.html')
+        user.private = False
+        if user.save():
+            flash('Successfully update')
+            return redirect(url_for('users.edit', id=user.id))
+        else:
+            return render_template('home.html')
 
 
 @users_blueprint.route('/upload', methods=['GET'])
@@ -86,7 +93,7 @@ def pic():
 
 @users_blueprint.route('/upload_pp', methods=['POST'])
 def pro_picture():
-    file = request.files["profile_image"]
+    file = request.files.get("profile_image")
 
     user = User.get_or_none(User.id == current_user.id)
 
