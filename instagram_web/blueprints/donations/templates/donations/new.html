@@ -11,11 +11,12 @@
         <div class="card w-50 mx-auto d-block">
             <img src="{{image.image_path_url}}" alt="picture" class="card-img-top" />
         </div>
+        
         <div id="dropin-container"></div>
         <form id="pmn_form" action="{{url_for('donations.payment', image_id=image.id)}}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <div class="form-group">
-                <input type="text" name="donation_amount" placeholder="Enter donation amount"
+                <input type="text" name="donation_amount" placeholder="Enter donation amount (based on USD)"
                     class="form-control d-block mx-auto w-50" />
             </div>
             <input id="pmn_input" type="hidden" name="payment_method_nonce">

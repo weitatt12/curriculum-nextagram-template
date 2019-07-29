@@ -22,12 +22,12 @@
         {% if current_user != user %}
         <form action="{{ url_for('fans_idols.create', idol_id=user.id )}}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input type="submit" class="btn btn-primary" value="follow" />
+            <input type="submit" class="btn btn-primary" style="margin-right: 5px" value="follow" />
         </form>
 
         <form action="{{ url_for('fans_idols.unfollow', idol_id=user.id)}}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
-            <input type="submit" class="btn btn-warning" value="unfollow" />
+            <input type="submit" class="btn btn-warning" style="margin-right: 5px" value="unfollow" />
         </form>
         {% endif %}
     </div>
@@ -36,17 +36,21 @@
     <p class="text-center">Sorry, this account is private!</p>
 
     {% else %}
-    <h2 class="text-center">Images</h2>
+    <h2 class="text-center" >Images</h2>
 
+    <div class="row">
+    
     {% for image in user.images %}
-    <div class="card w-25 mx-auto d-block">
-        <img class="card-img-top" style="width: 300" src="{{image.image_path_url}}" class="card-img-top">
-        <div class="card-body">
-            <a href="{{url_for('donations.new', image_id=image.id)}}" class="btn btn-primary mx-auto d-block">Donate
-                Now</a>
+        <div class="card w-25 mx-auto d-flex">
+            <img class="card-img-top" style="width:276px" src="{{image.image_path_url}}">
+            <div class="card-body">
+                <a href="{{url_for('donations.new', image_id=image.id)}}" class="btn btn-primary mx-auto d-block">Donate
+                    Now</a>
+            </div>
         </div>
-    </div>
     {% endfor %}
+    
+    </div>
     {% endif %}
 
 
