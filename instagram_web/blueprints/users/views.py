@@ -25,9 +25,9 @@ def create():
              password=password)
     if u.save():
         flash("Successfully Saved")
-        return redirect(url_for('users.new', id=u.id))
+        return redirect(url_for('users.new'))
     else:
-        return render_template('users/new.html', name=request.form['name'], errors=u.errors)
+        return render_template('users/new.html')
 
 
 @users_blueprint.route('/<username>', methods=["GET"])
