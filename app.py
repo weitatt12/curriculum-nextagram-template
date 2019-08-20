@@ -5,6 +5,7 @@ from models.base_model import db
 from flask_wtf.csrf import CSRFProtect
 from flask_login import LoginManager
 from flask import render_template
+from flask_jwt_extended import JWTManager
 
 web_dir = os.path.join(os.path.dirname(
     os.path.abspath(__file__)), 'instagram_web')
@@ -17,6 +18,9 @@ login_manager.login_view = "sessions.new"
 
 app.secret_key = os.getenv("SECRET_KEY")
 csrf = CSRFProtect(app)
+jwt = JWTManager(app)
+
+
 
 if os.getenv('FLASK_ENV') == 'production':
     app.config.from_object("config.ProductionConfig")

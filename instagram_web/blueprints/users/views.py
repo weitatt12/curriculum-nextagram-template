@@ -22,7 +22,7 @@ def create():
     username = request.form.get('username')
     password = request.form.get('password')
     u = User(name=name, email=email, username=username,
-             password=password)
+            password=password)
     if u.save():
         flash("Successfully Saved")
         return redirect(url_for('users.new'))

@@ -21,7 +21,7 @@ def create():
     if "user_file" not in request.files:
         return "No user_file key in request.files"
 
-    file = request.files["user_file"]
+    file = request.files.get("user_file")
 
     if file.filename == "":
         return "Please select a file"

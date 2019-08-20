@@ -19,7 +19,9 @@ def create():
     username = request.form.get('username')
     password = request.form.get('password')
 
-    user = User.get_or_none(User.username == username)
+    user = User.get_or_none(User.username == username) #this return the entire row of the person
+    #user = object
+    
     if not user:
         flash('username invalid')
         return redirect(url_for('sessions.new'))
