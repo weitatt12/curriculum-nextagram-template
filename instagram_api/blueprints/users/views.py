@@ -16,10 +16,10 @@ def new():
     
     for user in users:
         user_list.append({
-            'id' = user.id
-            'full_name' = user.full_name
-            'username' = user.username
-            'profile_pic' = user.profile_url
+            'id' : user.id
+            'full_name' : user.full_name
+            'username' : user.username
+            'profile_pic' : user.profile_url
         })
 
     response = {'data' : user_list}
@@ -34,12 +34,12 @@ def show():
     user = User.get_or_none(User.id == current_user)
 
     user_data = {
-        'id' = user.id,
-        'username' = user.username
+        'id' : user.id,
+        'username' : user.username
     }
 
     response = {
-        'data' = user_data
+        'data' : user_data
     }
 
     return make_response(jsonify(response), 200)
