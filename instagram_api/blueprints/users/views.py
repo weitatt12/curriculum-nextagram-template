@@ -16,9 +16,9 @@ def new():
     
     for user in users:
         user_list.append({
-            'id' : user.id
-            'full_name' : user.full_name
-            'username' : user.username
+            'id' : user.id,
+            'full_name' : user.full_name,
+            'username' : user.username,
             'profile_pic' : user.profile_url
         })
 
