@@ -34,7 +34,7 @@ def create():
 
         if image.save():
             flash('Upload Successful')
-            return redirect(url_for('images.new'))
+            return redirect(url_for('users.show', username=current_user.username))
 
     else:
         return redirect("/")
