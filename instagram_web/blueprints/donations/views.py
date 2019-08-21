@@ -51,8 +51,8 @@ def payment(image_id):
     )
 
     new_donation.save()
-    flash('saved to database')
-    return redirect(url_for('donations.new', image_id=image.id))
+    flash('Thank you for your donation')
+    return redirect(url_for('users.show', image_id=image.id, username=current_user.username))
 
     # amount = amount_from_the_client
     # if result.is_success:
