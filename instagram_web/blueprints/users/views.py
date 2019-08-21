@@ -1,9 +1,10 @@
 from flask import Blueprint, render_template, url_for, redirect, request, flash
 from werkzeug.security import generate_password_hash
 from models.user import User
-from flask_login import current_user
+from flask_login import current_user, login_required
 from instagram_web.util.helpers import upload_file_to_s3
 import os
+
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -36,7 +37,6 @@ def show(username):
     if not user:
         render_template('home.html')
     else:
-
         return render_template('users/show.html', user=user)
 
 
@@ -107,4 +107,28 @@ def pro_picture():
             User.id == current_user.id).execute()
         flash('Upload Successful')
         return redirect(url_for('users.show', username=user.username))
-    return redirect(url_for('user.new'))
+    return redirect(url_for('users.new'))
+
+@users_blueprint.route('/search', methods=['POST'])
+@login_required
+def search():
+    # method one
+    search_name = request.form.get('search_name')
+
+    user = User.get_or_none(User.name==search_name)
+
+    if not user :
+        return redirect(url_for('users.show',username=current_user.username))
+
+    return redirect(url_for('users.show',username=user.username))
+
+    # method 2
+    # search_name = request.form.get('search_name')
+    # users = User.select()
+    # for user in users:
+    #     if user.name == search_name: always put thing that you have only compare that this you want to
+    #         print(user.name)
+    #         return redirect(url_for('users.show',username=user.username))
+    # return redirect(url_for('users.show',username=current_user.username))
+
+
