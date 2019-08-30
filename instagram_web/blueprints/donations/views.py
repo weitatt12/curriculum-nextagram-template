@@ -4,7 +4,7 @@ from instagram_web.util.helpers import send_email
 from models.image import Image
 from models.donation import Donation
 from flask_login import current_user
-
+import braintree
 
 donations_blueprint = Blueprint(
     'donations', __name__, template_folder='templates')
@@ -31,7 +31,7 @@ def payment(image_id):
         flash('System error. Payment not made')
         return redirect(url_for('donations.new', image_id=image.id))
 
-    result = gateway.transaction.sale({
+    result = gateway.transaction.sale( {
         # "amount": 12,
         "amount": amount_from_the_client,
         "payment_method_nonce": nonce_from_the_client,
@@ -51,20 +51,57 @@ def payment(image_id):
     )
 
     new_donation.save()
-    flash('Thank you for your donation')
-    return redirect(url_for('users.show', image_id=image.id, username=current_user.username))
+    # flash('Thank you for your donation')
+    # return redirect(url_for('users.show', image_id=image.id, username=current_user.username))
+    return redirect(url_for('donations.show_checkout', transaction_id=result.transaction.id))
 
-    # amount = amount_from_the_client
-    # if result.is_success:
-    #     flash(f'done! you have successfully donated {{amount}}')
-    #     return redirect(url_for('donations.new'))
-    # else:
-    #     flash('error')
-    #     return render_template('donations/new.html')
+#************************************************************************************************************************
+TRANSACTION_SUCCESS_STATUSES = [
+    braintree.Transaction.Status.Authorized,
+    braintree.Transaction.Status.Authorizing,
+    braintree.Transaction.Status.Settled,
+    braintree.Transaction.Status.SettlementConfirmed,
+    braintree.Transaction.Status.SettlementPending,
+    braintree.Transaction.Status.Settling,
+    braintree.Transaction.Status.SubmittedForSettlement
+]
 
-    # if donation.amount == "":
-    #     return 'please enter a number'
+@donations_blueprint.route('/donate-to/<image_id>', methods=["GET"])
+def new_checkout(image_id):
+    client_token = generate_client_token()
+    return render_template("donations/new.html", client_token=client_token, image_id=image_id)
 
-    # if donation.save():
-    #     flash('Donate Successful')
-    #     return redirect(url_for('donations.new'))
+@donations_blueprint.route("/checkouts/<transaction_id>", methods=["GET"])
+def show_checkout(transaction_id):
+    transaction = gateway.transaction.find(transaction_id)
+    result = {}
+    if transaction.status in TRANSACTION_SUCCESS_STATUSES:
+        result = {
+            'header': 'Thank you for your generosity, you kind soul!',
+            'icon': 'success',
+            'message': 'Your test transaction has been successfully processed. See the Braintree API response and try again.'
+        }
+    else:
+        result = {
+            'header': 'Transaction Failed',
+            'icon': 'fail',
+            'message': 'Transaction has a status of ' + transaction.status + '.'
+        }
+    return render_template('donations/show.html', transaction=transaction, result=result, user=current_user)
+
+@donations_blueprint.route("/checkouts/<image_id>", methods=["POST"])
+def create_checkout(image_id):
+    result = transact({
+        'amount': request.form.get('amount'),
+        'payment_method_nonce': request.form.get('payment_method_nonce'),
+        'option': {
+            "submit_for_settlement": True
+        }
+    })
+
+    if result.is_success or result.transaction:
+        flash("Transaction successful! Thanks so much")
+        return redirect(url_for('donations.show_checkout', transaction_id=result.transaction.id))
+    else:
+        flash("Transaction fail! Please try again")
+        return redirect(url_for('donation.new'))

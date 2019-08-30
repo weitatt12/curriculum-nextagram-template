@@ -22,8 +22,10 @@ def create():
     email = request.form.get('email')
     username = request.form.get('username')
     password = request.form.get('password')
+
     u = User(name=name, email=email, username=username,
             password=password)
+
     if u.save():
         flash("Successfully Saved")
         return redirect(url_for('users.new'))
@@ -37,6 +39,7 @@ def show(username):
     if not user:
         render_template('home.html')
     else:
+        print(user)
         return render_template('users/show.html', user=user)
 
 

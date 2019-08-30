@@ -28,7 +28,7 @@ class User(BaseModel):
             self.errors.append("User not valid")
         if duplicate_emails and duplicate_emails.id != self.id:
             self.errors.append("Email not valid")
-        if not self.id:  # this will help us to generate hash password for the FIRST TIME other then go manually
+        if not self.id:  # this will help us to generate hash password for the FIRST TIME, other then go manually
             self.password = generate_password_hash(self.password)
             print('password hash generated')
 
