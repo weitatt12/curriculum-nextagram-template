@@ -9,3 +9,4 @@ class Donation(BaseModel):
     user = pw.ForeignKeyField(User, backref='donations', unique=False)
     image = pw.ForeignKeyField(Image, backref='donations')
     amount = pw.DecimalField(decimal_places=2)
+    transaction = pw.CharField(null=True)
