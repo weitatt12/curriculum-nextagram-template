@@ -24,6 +24,11 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
             <input type="submit" class="btn btn-primary" style="margin-right: 5px" value="follow" />
         </form>
+        
+        <form action="{{ url_for('fans_idols.pending', idol_id=user.id )}}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="submit" class="btn btn-secondary" style="margin-right: 5px" value="pending" />
+        </form>
 
         <form action="{{ url_for('fans_idols.unfollow', idol_id=user.id)}}" method="POST">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
@@ -33,6 +38,9 @@
     </div>
 
     {% if user.private == True and current_user != user %}
+    <div class="d-flex justify-content-center">
+        <img src="https://image.flaticon.com/icons/svg/61/61457.svg" alt="private" width="60px" height="60px">
+    </div>
     <p class="text-center">Sorry, this account is private!</p>
     {% else %}
 

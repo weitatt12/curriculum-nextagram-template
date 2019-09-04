@@ -22,14 +22,21 @@ def create(idol_id):
     return redirect(url_for('users.show', username=idol.username)) #this need to refer back to users.show parameter, because it pass in username then here have to pass it into here
 
 
+@fans_idols_blueprint.route('/<idol_id>/pending', methods=['POST'])
+def pending(idol_id):
+
+    idol = User.get_or_none(User.id == idol_id)
+    print(idol)
+    return redirect(url_for('users.show', username=idol.username))
+
 @fans_idols_blueprint.route('/<idol_id>/unfollow', methods=['POST'])
 def unfollow(idol_id):
 
     idol = User.get_or_none(User.id == idol_id)
 
-    relationship = FanIdol.get(FanIdol.idol==idol.id,FanIdol.fan==current_user.id)
+    relationship = FanIdol.get(FanIdol.idol == idol.id, FanIdol.fan == current_user.id)
     #this will help me wrap and get FanIdol (where, select your FanIdol.idol (from db) is equal to idol.id (from this funtion), select your FanIdol.fan (from db) comapre with current_user.id (from function))
     #this line 2 conditions need to be wrap it
-    relationship.delete_instance() # this is something (using previous variable) delete using delete_instance() then save
+    relationship.delete_instance() # (using previous variable) delete using delete_instance() then save
     flash(f"You are now unfollow {idol.name}")
     return redirect(url_for('users.show', username=idol.username))
